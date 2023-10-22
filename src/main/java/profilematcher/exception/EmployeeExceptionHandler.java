@@ -19,12 +19,4 @@ public class EmployeeExceptionHandler {
 
     return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
   }
-
-  @ExceptionHandler(WiremockServiceException.class)
-  private ResponseEntity<Object> handleWiremockServiceException(WiremockServiceException e) {
-    Map<String, Object> body = new LinkedHashMap<>();
-    body.put("message", e.getMessage());
-
-    return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
-  }
 }

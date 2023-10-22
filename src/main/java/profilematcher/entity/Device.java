@@ -1,10 +1,13 @@
 package profilematcher.entity;
 
-import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Id;
+
 @Data
+@Builder
 @Document(collection = "device")
 public class Device {
 

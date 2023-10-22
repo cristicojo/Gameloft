@@ -1,13 +1,15 @@
 package profilematcher.entity;
 
-import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import javax.persistence.Id;
 
 @Data
+@Builder
 @Document(collection = "player")
 public class Player {
 

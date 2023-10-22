@@ -36,12 +36,12 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
     });
     log.info("Player fetched " + player);
 
-    matchAndUpdatePlayer(player);
-    return new ResponseEntity<>(modelMapper.map(player, PlayerDto.class), HttpStatus.OK);
+    var updatedPlayerDto = matchAndUpdatePlayer(player);
+    return new ResponseEntity<>(updatedPlayerDto, HttpStatus.OK);
 
   }
 
-  private void matchAndUpdatePlayer(Player player) {
+  private PlayerDto matchAndUpdatePlayer(Player player) {
 
     var playerProfileDto = modelMapper.map(player, PlayerDto.class);
 
@@ -58,11 +58,13 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
         || (doesInventoryDtoContainsField(item1))
         || (!doesInventoryDtoContainsField(item4))) {
 
-      player.getActiveCampaigns().add(currentCampaign.getBody().getName());
-      log.info("Match complete and the player profile has been updated " + player);
+      playerProfileDto.getActiveCampaigns().add(currentCampaign.getBody().getName());
+      log.info("Match complete and the player profile has been updated " + playerProfileDto);
+      return playerProfileDto;
     }
 
-    log.info("Match incomplete and the player profile has not been updated " + player);
+    log.info("Match incomplete and the player profile has not been updated " + playerProfileDto);
+    return playerProfileDto;
 
   }
 

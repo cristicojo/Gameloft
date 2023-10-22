@@ -1,10 +1,12 @@
 package profilematcher.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
+@Builder
 @Document(collection = "inventory")
 public class Inventory {
 
