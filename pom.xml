@@ -16,6 +16,20 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
+        <sonar.exclusions>
+            **/dto/*,
+            **/dto/mockdto/*,
+            **/controller/*,
+            **/configuration/*,
+            **/entity/*,
+            **/exception/*,
+            **/repository/*,
+            **/highlevelcomp/*,
+            **/profilematcher/*
+        </sonar.exclusions>
+        <sonar.test.exclusions>
+            src/test/java/profilematcher/GameloftApplicationTests.java
+        </sonar.test.exclusions>
     </properties>
 
     <dependencies>
@@ -62,6 +76,11 @@
             <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -77,6 +96,30 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

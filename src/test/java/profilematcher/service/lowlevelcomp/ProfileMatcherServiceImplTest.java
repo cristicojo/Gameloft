@@ -45,6 +45,30 @@ public class ProfileMatcherServiceImplTest {
 
 
   @Test
+  void shouldGetProfileMatcherByLevelMinTest() {
+
+    var player = ProfileMatcherBuilder.createPlayerBuilder();
+    var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
+    var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
+    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(3);
+
+    when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
+    when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
+    when(mockCampaignService.getCurrentCampaign()).thenReturn(mockCurrentCampaignDto);
+
+    var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
+
+    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getBody().getName());
+
+    verify(repo, times(1)).findByPlayerId(player.getPlayerId());
+    verify(modelMapper, times(1)).map(player, PlayerDto.class);
+    verify(mockCampaignService, times(1)).getCurrentCampaign();
+
+  }
+
+  @Test
   void shouldGetProfileMatcherByLevelMaxTest() {
 
     var player = ProfileMatcherBuilder.createPlayerBuilder();
