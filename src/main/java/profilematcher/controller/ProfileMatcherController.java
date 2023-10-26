@@ -1,6 +1,7 @@
 package profilematcher.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +23,12 @@ public class ProfileMatcherController {
 
   @GetMapping(value = "/get_client_config/{player_id}")
   public ResponseEntity<PlayerDto> findProfileMatcherByPlayerId(@PathVariable(value = "player_id") String playerId) {
-    return service.getProfileMatcher(playerId);
+    return new ResponseEntity<>(service.getProfileMatcher(playerId), HttpStatus.OK);
   }
 
 
   @PostMapping(value = "/player/create")
   public ResponseEntity<PlayerDto> save(@RequestBody PlayerDto playerDto) {
-    return service.create(playerDto);
+    return new ResponseEntity<>(service.create(playerDto), HttpStatus.CREATED);
   }
 }

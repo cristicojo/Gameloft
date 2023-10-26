@@ -50,7 +50,8 @@ public class ProfileMatcherServiceImplTest {
     var player = ProfileMatcherBuilder.createPlayerBuilder();
     var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
     var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(3);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMin(4);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMax(5);
 
     when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
     when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
@@ -58,9 +59,9 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
-    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
-        mockCurrentCampaignDto.getBody().getName());
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getName());
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);
@@ -81,9 +82,9 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
-    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
-        mockCurrentCampaignDto.getBody().getName());
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getName());
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);
@@ -97,8 +98,8 @@ public class ProfileMatcherServiceImplTest {
     var player = ProfileMatcherBuilder.createPlayerBuilder();
     var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
     var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMax(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(0);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMax(0);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMin(0);
 
     when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
     when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
@@ -106,9 +107,9 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
-    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
-        mockCurrentCampaignDto.getBody().getName());
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getName());
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);
@@ -125,9 +126,9 @@ public class ProfileMatcherServiceImplTest {
     var player = ProfileMatcherBuilder.createPlayerBuilder();
     var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
     var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMax(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getHas().setCountry(countries);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMax(0);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMin(0);
+    mockCurrentCampaignDto.getMatchers().getHas().setCountry(countries);
 
     when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
     when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
@@ -135,9 +136,9 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
-    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
-        mockCurrentCampaignDto.getBody().getName());
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getName());
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);
@@ -156,10 +157,10 @@ public class ProfileMatcherServiceImplTest {
     var player = ProfileMatcherBuilder.createPlayerBuilder();
     var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
     var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMax(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getHas().setCountry(countries);
-    mockCurrentCampaignDto.getBody().getMatchers().getHas().setItems(items);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMax(0);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMin(0);
+    mockCurrentCampaignDto.getMatchers().getHas().setCountry(countries);
+    mockCurrentCampaignDto.getMatchers().getHas().setItems(items);
 
     when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
     when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
@@ -167,9 +168,9 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(1);
-    assertThat(profileMatcher.getBody().getActiveCampaigns().get(0)).isEqualTo(
-        mockCurrentCampaignDto.getBody().getName());
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(1);
+    assertThat(profileMatcher.getActiveCampaigns().get(0)).isEqualTo(
+        mockCurrentCampaignDto.getName());
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);
@@ -190,11 +191,11 @@ public class ProfileMatcherServiceImplTest {
     var player = ProfileMatcherBuilder.createPlayerBuilder();
     var playerDto = ProfileMatcherBuilder.createPlayerDtoBuilder();
     var mockCurrentCampaignDto = ProfileMatcherBuilder.createMockCurrentCampaignDtoBuilder();
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMax(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getLevel().setMin(0);
-    mockCurrentCampaignDto.getBody().getMatchers().getHas().setCountry(countries);
-    mockCurrentCampaignDto.getBody().getMatchers().getHas().setItems(items11);
-    mockCurrentCampaignDto.getBody().getMatchers().getDoesNotHave().setItems(items34);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMax(0);
+    mockCurrentCampaignDto.getMatchers().getLevel().setMin(0);
+    mockCurrentCampaignDto.getMatchers().getHas().setCountry(countries);
+    mockCurrentCampaignDto.getMatchers().getHas().setItems(items11);
+    mockCurrentCampaignDto.getMatchers().getDoesNotHave().setItems(items34);
 
     when(repo.findByPlayerId(player.getPlayerId())).thenReturn(Optional.of(player));
     when(modelMapper.map(player, PlayerDto.class)).thenReturn(playerDto);
@@ -202,7 +203,7 @@ public class ProfileMatcherServiceImplTest {
 
     var profileMatcher = profileMatcherService.getProfileMatcher(player.getPlayerId());
 
-    assertThat(profileMatcher.getBody().getActiveCampaigns().size()).isEqualTo(0);
+    assertThat(profileMatcher.getActiveCampaigns().size()).isEqualTo(0);
 
     verify(repo, times(1)).findByPlayerId(player.getPlayerId());
     verify(modelMapper, times(1)).map(player, PlayerDto.class);

@@ -1,8 +1,6 @@
 package profilematcher.util.builder;
 
 import lombok.experimental.UtilityClass;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import profilematcher.dto.ClanDto;
 import profilematcher.dto.DeviceDto;
 import profilematcher.dto.InventoryDto;
@@ -105,7 +103,7 @@ public class ProfileMatcherBuilder {
         .build();
   }
 
-  public ResponseEntity<MockCurrentCampaignDto> createMockCurrentCampaignDtoBuilder() {
+  public MockCurrentCampaignDto createMockCurrentCampaignDtoBuilder() {
 
     List<String> countries = new ArrayList<>();
     countries.add("US");
@@ -116,7 +114,7 @@ public class ProfileMatcherBuilder {
     List<String> items4 = new ArrayList<>();
     items4.add("item4");
 
-    return new ResponseEntity<>(MockCurrentCampaignDto.builder()
+    return MockCurrentCampaignDto.builder()
         .game("mygame")
         .name("mycampaign")
         .priority(10.5f)
@@ -137,9 +135,6 @@ public class ProfileMatcherBuilder {
             .enabled(true)
             .lastUpdated("2021-07-13 11:46:58Z")
             .build())
-        .build(),
-        HttpStatus.OK);
+        .build();
   }
-
-
 }

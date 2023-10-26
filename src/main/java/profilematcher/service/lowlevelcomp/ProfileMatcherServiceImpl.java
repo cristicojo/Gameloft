@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import profilematcher.dto.InventoryDto;
 import profilematcher.dto.PlayerDto;
@@ -14,7 +12,11 @@ import profilematcher.repository.PlayerRepository;
 import profilematcher.service.highlevelcomp.IProfileMatcherService;
 import profilematcher.service.highlevelcomp.MockCampaignService;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -27,7 +29,7 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
 
 
   @Override
-  public ResponseEntity<PlayerDto> getProfileMatcher(String playerId) {
+  public PlayerDto getProfileMatcher(String playerId) {
 
     log.info("Fetching player with id " + playerId);
     var player = repo.findByPlayerId(playerId).orElseThrow(() -> {
@@ -36,8 +38,7 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
     });
     log.info("Player fetched " + player);
 
-    var updatedPlayerDto = matchAndUpdatePlayer(player);
-    return new ResponseEntity<>(updatedPlayerDto, HttpStatus.OK);
+    return matchAndUpdatePlayer(player);
 
   }
 
@@ -46,19 +47,22 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
     var playerProfileDto = modelMapper.map(player, PlayerDto.class);
 
     var currentCampaign = mockCampaignService.getCurrentCampaign();
-    log.info("Cuurent campaign fetched is " + currentCampaign.getBody() + " with status code "
-        + currentCampaign.getStatusCode());
+    log.info("Cuurent campaign fetched is " + currentCampaign);
 
-    String item1 = currentCampaign.getBody().getMatchers().getHas().getItems().get(0);
-    String item4 = currentCampaign.getBody().getMatchers().getDoesNotHave().getItems().get(0);
+    Set<String> hasItems = new HashSet<>(currentCampaign.getMatchers()
+        .getHas()
+        .getItems());
+    Set<String> doesNotHaveItems = new HashSet<>(currentCampaign.getMatchers()
+        .getDoesNotHave()
+        .getItems());
 
-    if ((playerProfileDto.getLevel() == currentCampaign.getBody().getMatchers().getLevel().getMin())
-        || (playerProfileDto.getLevel() == currentCampaign.getBody().getMatchers().getLevel().getMax())
-        || (currentCampaign.getBody().getMatchers().getHas().getCountry().contains(playerProfileDto.getCountry()))
-        || (doesInventoryDtoContainsField(item1))
-        || (!doesInventoryDtoContainsField(item4))) {
+    if ((playerProfileDto.getLevel() >= currentCampaign.getMatchers().getLevel().getMin())
+        && (playerProfileDto.getLevel() <= currentCampaign.getMatchers().getLevel().getMax())
+        || (currentCampaign.getMatchers().getHas().getCountry().contains(playerProfileDto.getCountry()))
+        || (doesInventoryDtoContainsField(hasItems))
+        || (!doesInventoryDtoContainsField(doesNotHaveItems))) {
 
-      playerProfileDto.getActiveCampaigns().add(currentCampaign.getBody().getName());
+      playerProfileDto.getActiveCampaigns().add(currentCampaign.getName());
       log.info("Match complete and the player profile has been updated " + playerProfileDto);
       return playerProfileDto;
     }
@@ -68,17 +72,20 @@ public class ProfileMatcherServiceImpl implements IProfileMatcherService {
 
   }
 
-  private boolean doesInventoryDtoContainsField(String fieldName) {
-    return Arrays.stream(InventoryDto.class.getDeclaredFields())
-        .anyMatch(field -> field.getName().equals(fieldName));
+  private boolean doesInventoryDtoContainsField(Set<String> hasItems) {
+
+    Set<String> fieldSet = Arrays.stream(InventoryDto.class.getDeclaredFields())
+        .map(Field::getName)
+        .collect(Collectors.toSet());
+
+    return fieldSet.containsAll(hasItems);
   }
 
 
   @Override
-  public ResponseEntity<PlayerDto> create(PlayerDto newPlayerDto) {
+  public PlayerDto create(PlayerDto newPlayerDto) {
     log.info("Create player " + newPlayerDto);
-    return new ResponseEntity<>(
-        modelMapper.map(repo.save(modelMapper.map(newPlayerDto, Player.class)),
-            PlayerDto.class), HttpStatus.CREATED);
+    return modelMapper.map(repo.save(modelMapper.map(newPlayerDto, Player.class)),
+        PlayerDto.class);
   }
 }
